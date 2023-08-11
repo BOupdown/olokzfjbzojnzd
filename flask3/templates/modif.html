@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Utilisateurs</title>
+{% endblock %}
+
+{% block random %}
+<br><br>
+<h1 style="text-align: center;">Modifier Collaborateurs</h1>
+<form method="POST" action="/search_tickets">
+  <button type="submit">Search</button>
+</form>
+<br>
+<div class='center2'>
+<table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Statut</th>
+      <th>Mensuel Brut</th>
+      <th>Email</th>
+      <th>numéro de téléphone</th>
+      <th>Modification du tableau</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <form class="edit_user" method="POST" action="/edit_modif/{{ user['id'] }}">
+        <td>
+            <input type="text" name="prenom" value="{{ user['prenom'] }}">
+        </td>
+        <td>
+            <input type="text" name="nom" value="{{ user['nom'] }}">
+        </td>
+        <td>
+          <input type="text" name="statut" value="{{ user['statut'] }}">
+        </td>
+        <td>
+          <input type="number" name="mensuel_brut" value="{{ user['mensuelBrut'] }}">
+        </td>
+        <td>
+            <input type="text" name="email" value="{{ user['email'] }}">
+        </td>
+        <td>
+            <input type="text" name="tel" value="{{ user['numeroGsm'] }}">
+        </td>
+        <td>
+          <button type="submit">Mise à jour</button>
+        </td>
+      </form>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<script>
+
+
+</script>
+
+
+{% endblock %}

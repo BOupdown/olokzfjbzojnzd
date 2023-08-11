@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Utilisateurs</title>
+<div class="green-message">
+    Base de données mise à jour
+</div>
+{% endblock %}
+
+
+{% block random %}
+<style>
+    .green-message {
+        background-color: #66ff66;
+        color: #000;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .form-container {
+      display: inline-block;
+      width: 250px; /* Set the desired width of the form squares */
+      height: 225px; /* Set the desired height of the form squares */
+      margin: 15px; /* Add some margin for spacing */
+      text-align: center; /* Center the content horizontally */
+      background-color: #a8a8a8; /* Set the background color of the squares */
+      border-radius: 10px; /* Rounded corners for a nice look */
+  }
+  
+  /* Adjust this margin to control the spacing between forms */
+  .form-container:last-child {
+      margin-right: 0;
+  }
+  
+</style>
+
+<br><br>
+<h1 style="text-align: center;">Utilisateurs</h1>
+<br>
+<a href="/renderCsv" style="background-color: black; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Télécharger Csv</a>
+<br>
+<div class="form-container">
+<br>
+<form method="POST" action="/search_tickets">
+  <label for="start_date">Date début : </label>
+  <input type="text" id="start_date" name="start_date" placeholder="dd-mm-aaaa" required><br><br>
+
+  <label for="end_date">Date fin : </label>
+  <input type="text" id="end_date" name="end_date" placeholder="dd-mm-aaaa" required><br><br>
+
+  <button type="submit">Search</button>
+</form>
+</div>
+<br>
+<div class='center2'>
+<table>
+  <thead>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Statut</th>
+      <th>Mensuel Brut</th>
+      <th>Taux Horaire</th>
+      <th>Temps Intervention Total</th>
+      <th>Total</th>
+      <th>Modification du tableau</th>
+      <th>Tickets de la personne</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td>{{ user['prenom'] }}</td>
+      <td>{{ user['nom'] }}</td>
+      <form class="edit_user" method="POST" action="/edit_user/{{ user['id'] }}">
+        <td>
+          <input type="text" name="statut" value="{{ user['statut'] }}">
+        </td>
+        <td>
+          <input type="number" name="mensuel_brut" value="{{ user['mensuelBrut'] }}">
+        </td>
+        <td>{{ user['tauxHoraire'] }}</td>
+        <td> {{ user['tempsIntervention'] }} </td>
+        <td>{{ user['total'] }}</td>
+        <td>
+          <button type="submit">Mise à jour</button>
+        </td>
+      </form>
+      <td>
+        <form method="POST" action="/tickets/{{ user['id'] }}">
+          <button type="submit">Tickets</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<script>
+
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block style %}
+    <style>
+        #calendar {
+            width: 100%;
+            height: 500px;
+        }
+
+        .form-container {
+            display: inline-block;
+            width: 250px; /* Set the desired width of the form squares */
+            height: 320px; /* Set the desired height of the form squares */
+            margin: 15px; /* Add some margin for spacing */
+            text-align: center; /* Center the content horizontally */
+            background-color: #a8a8a8; /* Set the background color of the squares */
+            border-radius: 10px; /* Rounded corners for a nice look */
+        }
+        
+        /* Adjust this margin to control the spacing between forms */
+        .form-container:last-child {
+            margin-right: 0;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block random %}
+<form method="POST" action="/ticket/appel">
+    <button type="submit">Search</button>
+  </form>
+
+<div class="form-container">
+    <br>
+<form action="/ajouter_evenement" method="POST">
+    <label for="date">Date:</label>
+    <input type="text" id="date" name="date" placeholder="dd-mm-aaaa" required><br><br>
+    
+    <label for="prenom1">Titulaire:</label>
+    <select id="prenom1" name="prenom1" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label for="prenom2">Backup:</label>
+    <select id="prenom2" name="prenom2" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="prenom3">Matin:</label>
+    <select id="prenom3" name="prenom3" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="prenom4">Apres-midi:</label>
+    <select id="prenom4" name="prenom4" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    
+    <button type="submit">Ajouter semaine</button>
+</form>
+</div>
+
+<div class="form-container">
+    <br>
+<form action="/update_event" method="POST">
+    <label for="date">Date:</label>
+    <input type="text" id="date" name="date" placeholder="dd-mm-aaaa" required><br><br>
+
+    <label for="prenom1">Titulaire:</label>
+    <select id="prenom1" name="prenom1" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+    
+    <label for="prenom2">Backup:</label>
+    <select id="prenom2" name="prenom2" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="prenom3">Matin:</label>
+    <select id="prenom3" name="prenom3" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <label for="prenom4">Apres-midi:</label>
+    <select id="prenom4" name="prenom4" required>
+        {% for user in users %}
+            <option value="{{ user['id'] }}">{{ user['prenom'] }}</option>
+        {% endfor %}
+    </select><br><br>
+
+    <button type="submit">Modifier jour</button>
+</form>
+</div>
+
+
+<div id="calendar"></div>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            height: 'auto',
+            events: [
+                {% for event in events %}
+                {% for dates in calendrier %}
+                {% if event.start == dates['date'] %}
+                            {% for user in users %}
+                            {% if user['id'] == event.title1 %}
+                            {
+                                title: 'Titulaire {{ user["prenom"] }}',
+                                start: '{{ event.start }}',
+                            },
+                            {% endif %}
+                            {% if user['id'] == event.title2 %}
+                            {
+                                title: 'Backup {{ user["prenom"] }}',
+                                start: '{{ event.start }}',
+                            },
+                            {% endif %}
+                            {% if user['id'] == event.title3 %}
+                            {
+                                title: 'Matin {{ user["prenom"] }}',
+                                start: '{{ event.start }}',
+                            },
+                            {% endif %}
+                            {% if user['id'] == event.title4 %}
+                            {
+                                title: 'Aprem {{ user["prenom"] }}',
+                                start: '{{ event.start }}',
+                            },
+                            {% endif %}
+                            {% endfor %}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                
+            ]
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

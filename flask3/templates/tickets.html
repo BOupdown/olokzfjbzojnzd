@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Tickets</title>
+{% endblock %}
+
+{% block random %}
+<br>
+<h1 style="text-align: center;">Tickets</h1>
+<br>
+<br>
+<div class="center2">
+<table>
+  <thead>
+    <tr>
+      <th>Libellé Mail</th>
+      <th>Numéro Ticket</th>
+      <th>Date d'intervention</th>
+      <th>Début intervention</th>
+      <th>Fin intervention</th>
+      <th>Temps intervention</th>
+      <th>Statut</th>
+      <th>Modifier</th>
+      <th>Supprimer</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ticket in tickets %}
+    <tr>
+      <form class="editTicket" method="POST" action="/editTicket/{{ ticket['id'] }}/{{ ticket['idUser'] }}">
+        <td>{{ ticket['libelleMail'] }}</td>
+        <td>{{ ticket['numeroTicket'] }}</td>
+        <td>{{ ticket['dateIntervention'] }}</td>
+        <td>
+          <input type="text" name="heureDebut" value="{{ ticket['heureDebut'] }}" pattern="\d{2}:\d{2}" title="Format attendu: xx:yy (exemple: 09:30)">
+        </td>
+        <td>
+          <input type="text" name="heureFin" value="{{ ticket['heureFin'] }}" pattern="\d{2}:\d{2}" title="Format attendu: xx:yy (exemple: 18:45)">
+        </td>
+              <td>{{ ticket['tempsIntervention'] }} </td>
+        <td>
+          <input type="text" name="statut" value="{{ ticket['statut'] }}">
+        </td>
+        <td>
+          <button type="submit">Modifier</button>
+        </td>
+      </form>
+      <td>
+        <form method="POST" action="/suppTicket/{{ ticket['id'] }}/{{ ticket['idUser'] }}">
+          <button type="submit">Supprimer</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+
+<form id="ajoutTicket" method="POST" action="/ajoutTicket/{{ user_id }}">
+  
+  <label for="libelleMail">Libellé de l'e-mail:</label>
+  <input type="text" name="libelleMail" id="libelleMail" required><br><br>
+
+  <label for="numeroTicket">Numéro du ticket:</label>
+  <input type="number" name="numeroTicket" id="numeroTicket" required><br><br>
+
+  <label for="dateIntervention">Date d'intervention:</label>
+  <input type="text" name="dateIntervention" id="dateIntervention" pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}" required><br><br>
+
+  <label for="heureDebut">Heure de début:</label>
+  <input type="time" name="heureDebut" id="heureDebut" required><br><br>
+
+  <label for="heureFin">Heure de fin:</label>
+  <input type="time" name="heureFin" id="heureFin" required><br><br>
+
+  <input type="submit" value="Ajouter">
+
+  
+</form>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var clickAllBtn = document.getElementById('clickAllBtn');
+    clickAllBtn.addEventListener('click', function() {
+      var modifyButtons = document.querySelectorAll('form button[type="submit"]');
+      for (var i = 0; i < modifyButtons.length; i++) {
+        modifyButtons[i].click();
+      }
+    });
+  });
+        </script>
+
+{% endblock %}
